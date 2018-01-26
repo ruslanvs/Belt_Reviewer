@@ -1,0 +1,1 @@
+Milestone Python / Django / ORM / Bcrypt educational assignment at Coding Dojo

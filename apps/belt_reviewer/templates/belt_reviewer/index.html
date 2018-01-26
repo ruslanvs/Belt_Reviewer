@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Belt Reviewer</title>
+</head>
+<body>
+    <h1>Welcome!</h1>
+    <h2>Register</h2>
+    <form action="signup" method="POST">
+        <div>
+            <label for="fname">First Name:</label>
+            <input type="text" name="fname" id="fname">
+        </div>
+
+        <div>
+            <label for="lname">Last Name:</label>
+            <input type="text" name="lname" id="lname">
+        </div>
+
+        <div>
+            <label for="email">Email:</label>
+            <input type="text" name="email" id="email">
+        </div>
+
+        <div>
+            <label for="pw">Password:</label>
+            <input type="text" name="pw" id="pw">
+        </div>
+        <p>Password should be at least 8 characters</p>
+
+        <div>
+            <label for="pwc">Confirm Password:</label>
+            <input type="text" name="pwc" id="pwc">
+        </div>
+
+        <input type="submit" value="Register">
+
+    </form>
+    <h2>Login</h2>
+    <form action="login">
+        <div>
+            <label for="lemail">Email:</label>
+            <input type="text" name="email" id="lemail">
+        </div>
+
+        <div>
+            <label for="lpw">Password:</label>
+            <input type="text" name="pw" id="lpw">
+        </div>
+        <input type="submit" value="Login">
+
+    </form>
+</body>
+</html>
