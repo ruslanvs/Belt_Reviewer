@@ -15,6 +15,8 @@ class Author( models.Model ):
     user = models.OneToOneField( User, primary_key = True )
     created_at = models.DateTimeField( auto_now_add = True )
     updated_at = models.DateTimeField( auto_now = True )
+    def __unicode__( self ):
+        return "id: " + str( self.id )
 
 class Book( models.Model ):
     users = models.ManyToManyField( User, related_name = "books" )
