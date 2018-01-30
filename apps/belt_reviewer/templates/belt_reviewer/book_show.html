@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'belt_reviewer/css/main.css' %}" media="screen" title="no title"  charset="utf-8">
+    <title>{{ book.title }}</title>
+</head>
+<body>
+    <div class="header">
+        <a href="/belt_reviewer/users/{{ request.session.logged_in_user_id }}/show">{{ request.session.fname }} {{ request.session.lname }}</a>
+        <a href="/belt_reviewer/books">Home</a>
+        <a href="/belt_reviewer/logout">Logout</a>
+    </div>
+        
+    {% if messages %}
+        {% for msg in messages %}
+            {{ msg.message }}
+        {% endfor %}
+    {% endif %}
+
+    <h1>{{ book.title }}</h1>
+    <p>Author: {{ book.author.name }}</p>
+    <p>Loaded by: {{ book.user.fname }} {{ book.user.lname }}</p>
+    <h2>Reviews</h2>
+    {% for review in reviews %}
+        <p>Rating: {{ review.rating }}</p>
+        <p>{{ review.user.fname}} says: {{ review.content }}</p>
+        <p>{{ review.created_at }}</p>
+    {% endfor%}
+
+    <form action="/belt_reviewer/reviews/{{ id }}/create">
+        <h2>Add a review:</h2>
+        <textarea name="content" id="content"></textarea>
+        <div>
+            <label for="rating">Rating</label>
+            <select name="rating" id="rating">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        <input type="submit" value="Submit Review">
+    </form>
+
+</body>
+</html>

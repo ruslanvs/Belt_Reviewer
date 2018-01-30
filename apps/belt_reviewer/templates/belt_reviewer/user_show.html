@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'belt_reviewer/css/main.css' %}" media="screen" title="no title"  charset="utf-8">
+    <title>User Page</title>
+</head>
+<body>
+    <div class="header">
+        <a href="/belt_reviewer/books">Home</a>
+        <a href="/belt_reviewer/new_book_and_review">Add a Book and a Review</a>
+        <a href="/belt_reviewer/logout">Logout</a>
+    </div>
+    <h1>User: {{user.fname}} {{user.lname}}</h1>
+    <p>Email: {{user.email}}</p>
+    <p>Total Reviews: {{reviews_total}}</p>
+    <h2>Posted reviews on following books:</h2>
+    {% for review in reviews %}
+        <div>
+            <a href="/belt_reviewer/books/{{ review.book.id }}/show">{{ review.book.title }}</a>
+        </div>
+    {% endfor %}
+    
+</body>
+</html>

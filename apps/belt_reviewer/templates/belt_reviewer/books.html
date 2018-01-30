@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'belt_reviewer/css/main.css' %}" media="screen" title="no title"  charset="utf-8">
+    <title>Books</title>
+</head>
+<body>
+    <div class="header">
+        <a href="/belt_reviewer/users/{{ request.session.logged_in_user_id }}/show">{{ request.session.fname }} {{ request.session.lname }}</a>
+        <a href="/belt_reviewer/books_and_reviews/new">Add a Book and a Review</a>
+        <a href="/belt_reviewer/books_all">All books</a>
+        <a href="/belt_reviewer/logout">Logout</a>
+    </div>
+    {% if messages %}
+        {% for msg in messages %}
+            {{ msg.message }}
+        {% endfor %}
+    {% endif %}
+    <h1>Recent Book Reviews:</h1>
+
+    {% for review in latest_reviews %}
+        <hr>
+        <h3><a href="/belt_reviewer/books/{{ review.book.id }}/show">{{ review.book.title }}</a></h3>
+        <p>Rating: {{ review.rating }}</p>
+        <div>
+            <p>Loaded by: </p>
+            <a href="/belt_reviewer/users/{{ review.book.user.id }}/show">{{ review.book.user.fname }} {{ review.book.user.lname }}</a>
+        </div>
+        <div>
+            <a href="/belt_reviewer/users/{{ review.user.id }}/show">{{ review.user.fname }}</a>
+            <p>says: {{ review.content }}</p>
+        </div>
+
+        <p>{{ review.created_at}}</p>
+        {% if review.user.id == request.session.logged_in_user_id %}
+        <a class="delete_link" href="reviews/{{ review.id }}/destroy">Delete</a> 
+        {% endif %}
+    {% endfor %}
+    
+    <hr>
+
+    <h2>Other Books and Reviews:</h2>
+    {% for review in other_reviews %}
+        <h3><a href="/belt_reviewer/books/{{ review.book.id }}">{{ review.book.title }}</a></h3>
+    {% endfor %}
+
+    
+    
+</body>
+</html>

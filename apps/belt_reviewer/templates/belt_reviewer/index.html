@@ -2,12 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'belt_reviewer/css/main.css' %}" media="screen" title="no title"  charset="utf-8">
     <title>Belt Reviewer</title>
 </head>
 <body>
     <h1>Welcome!</h1>
+
     <h2>Register</h2>
+    {% if messages %}
+        {% for msg in messages %}
+            {{ msg }}
+        {% endfor %}
+    {% endif %}
+
     <form action="signup" method="POST">
+        {% csrf_token %}
         <div>
             <label for="fname">First Name:</label>
             <input type="text" name="fname" id="fname">
@@ -25,20 +35,22 @@
 
         <div>
             <label for="pw">Password:</label>
-            <input type="text" name="pw" id="pw">
+            <input type="password" name="pw" id="pw">
         </div>
-        <p>Password should be at least 8 characters</p>
+        <p class="footnote">*Password should be at least 8 characters</p>
 
         <div>
             <label for="pwc">Confirm Password:</label>
-            <input type="text" name="pwc" id="pwc">
+            <input type="password" name="pwc" id="pwc">
         </div>
 
         <input type="submit" value="Register">
 
     </form>
+    <hr>
     <h2>Login</h2>
-    <form action="login">
+    <form action="login" method="POST">
+        {% csrf_token %}
         <div>
             <label for="lemail">Email:</label>
             <input type="text" name="email" id="lemail">
@@ -46,8 +58,9 @@
 
         <div>
             <label for="lpw">Password:</label>
-            <input type="text" name="pw" id="lpw">
+            <input type="password" name="pw" id="lpw">
         </div>
+        <input type="hidden" name="from" value="{{ request.path }}">
         <input type="submit" value="Login">
 
     </form>

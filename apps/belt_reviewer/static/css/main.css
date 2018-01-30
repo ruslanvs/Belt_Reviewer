@@ -1,0 +1,19 @@
+/* * {
+    font-family: Helvetica;
+} */
+
+label{
+    background-color: yellow;
+    width: 150px;
+    text-align: right;
+}
+
+.footnote{
+    margin-top: 0px;
+    font-size: 10px;
+}
+
+/* .header *{
+    display: inline-block;
+    
+} */

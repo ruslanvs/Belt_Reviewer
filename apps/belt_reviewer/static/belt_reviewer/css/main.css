@@ -1,0 +1,8 @@
+*{
+    font-family: Helvetica;
+}
+
+label{
+    width: 150px;
+    text-align: right;
+}

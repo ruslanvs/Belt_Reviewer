@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'belt_reviewer/css/main.css' %}" media="screen" title="no title"  charset="utf-8">
+    <title>All books</title>
+</head>
+<body>
+    <div class="header">
+        <a href="/belt_reviewer/users/{{ request.session.logged_in_user_id }}/show">{{ request.session.fname }} {{ request.session.lname }}</a>
+        <a href="/belt_reviewer/books">Home</a>
+        <a href="/belt_reviewer/books_and_reviews/new">Add a Book and a Review</a>
+        <a href="/belt_reviewer/logout">Logout</a>
+    </div>
+    <ul>
+        {% for book in books %}
+        <li><a href="/belt_reviewer/books/{{ book.id }}/show">{{ book.title }}</a></li>
+        {% endfor %}
+    </ul>
+    
+</body>
+</html>
