@@ -5,16 +5,16 @@ from django.contrib import messages
 from .models import User, Book, Review, Author
 
 def index( request ):
-    if not request.session['logged_in_user_id']:
+    if "logged_in_user_id" not in request.session:
         return render( request, "belt_reviewer/index.html" )
     else:
         return redirect( "/belt_reviewer/books" )
 
 def logout( request ):
-    if not request.session['logged_in_user_id']:
+    if "logged_in_user_id" not in request.session:
         return redirect( "/belt_reviewer" )
     else:
-        request.session['logged_in_user_id'] = False
+        request.session.flush()
         return redirect( "/belt_reviewer" )
 
 def login( request ):
@@ -22,7 +22,7 @@ def login( request ):
     print "*"*25, "NEXT: ", request.POST['from']
     print "*"*25, "REQUEST PATH: ", request.path
     print "*"*25, "HTTP REFER: ", request.META.get('HTTP_REFERER')
-    if not request.session['logged_in_user_id']:#IF LOGGED IN ALREADY, THEN GOES TO BOOKS
+    if "logged_in_user_id" not in request.session:#IF LOGGED IN ALREADY, THEN GOES TO BOOKS
         errors = User.objects.login_validation( request.POST )
         if errors:
             messages.error( request, errors )
@@ -34,7 +34,7 @@ def login( request ):
         return redirect( "/belt_reviewer/books" )
 
 def signup( request ):
-    if not request.session['logged_in_user_id']: #IF LOGGED IN ALREADY, THEN GOES TO BOOKS
+    if "logged_in_user_id" not in request.session: #IF LOGGED IN ALREADY, THEN GOES TO BOOKS
         errors = User.objects.signup_validation( request.POST ) #>> lay out messages around the index page
         if errors:
             messages.error( request, errors )
@@ -47,7 +47,7 @@ def signup( request ):
         return redirect( "/belt_reviewer/books" )
 
 def books( request ):
-    if not request.session['logged_in_user_id']:
+    if "logged_in_user_id" not in request.session:
         return redirect( "/belt_reviewer" )
     else:
         request.session['fname'] = User.objects.get( id = request.session['logged_in_user_id'] ).fname
@@ -59,7 +59,7 @@ def books( request ):
         return render ( request, "belt_reviewer/books.html", page_data )
 
 def books_all( request ):
-    if not request.session['logged_in_user_id']:
+    if "logged_in_user_id" not in request.session:
         return redirect( "/belt_reviewer" )
     else:
         page_data = {
@@ -68,7 +68,7 @@ def books_all( request ):
         return render ( request, "belt_reviewer/books_all.html", page_data )
 
 def book_show( request, id ):
-    if not request.session['logged_in_user_id']:
+    if "logged_in_user_id" not in request.session:
         return redirect( "/belt_reviewer" )
     else:
         page_data = {
@@ -79,7 +79,7 @@ def book_show( request, id ):
         return render( request, "belt_reviewer/book_show.html", page_data )
 
 def books_and_reviews_new( request ):
-    if not request.session['logged_in_user_id']:
+    if "logged_in_user_id" not in request.session:
         return redirect( "/belt_reviewer" )
     else:
         page_data = {
@@ -88,7 +88,7 @@ def books_and_reviews_new( request ):
         return render( request, "belt_reviewer/books_and_reviews_new.html", page_data )
 
 def books_and_reviews_create( request ):
-    if not request.session['logged_in_user_id']:
+    if "logged_in_user_id" not in request.session:
         return redirect( "/belt_reviewer" )
     else:
 
@@ -107,10 +107,7 @@ def books_and_reviews_create( request ):
             messages.error( request, errors )
             return redirect( "/belt_reviewer/books_and_reviews/new" )
 
-        print '*'*25, "REQUEST.POST:", request.POST
         author = Author.objects.create( request.POST )
-        print '*'*25, "VIEWS.PY AUTHOR:", author
-
         Book.objects.create( request.POST, request.session['logged_in_user_id'], author )
         Review.objects.create( request.POST, request.session['logged_in_user_id'] )
 
@@ -119,7 +116,7 @@ def books_and_reviews_create( request ):
         return redirect( "/belt_reviewer/books" ) #>>> chech
 
 def review_create( request, id ):
-    if not request.session['logged_in_user_id']:
+    if "logged_in_user_id" not in request.session:
         return redirect( "/belt_reviewer" )
     else:
         errors = Review.objects.validator( request.POST, request.session['logged_in_user_id'] )
@@ -127,13 +124,13 @@ def review_create( request, id ):
             messages.error( request, errors )
             return redirect( "/belt_reviewer/books_and_reviews/new" )
         else:
-            Review.objects.create( request.POST, request.session['logged_in_user_id'] )
+            Review.objects.create( request.POST, request.session['logged_in_user_id'], id )
             messages.success( request, "Review has been saved" )
             id = id
             return redirect( "/belt_reviewer/books/" + id + "/show" ) #>>> plugged for now
 
 def user_show( request, id ):
-    if not request.session['logged_in_user_id']:
+    if "logged_in_user_id" not in request.session:
         return redirect( "/belt_reviewer" )
     else:
         page_data = {
@@ -144,7 +141,7 @@ def user_show( request, id ):
         return render( request, "belt_reviewer/user_show.html", page_data )
 
 def review_destroy( request, id ):
-    if not request.session['logged_in_user_id']:
+    if "logged_in_user_id" not in request.session:
         return redirect( "/belt_reviewer" )
     else:
         Review.objects.get( id = id ).delete()

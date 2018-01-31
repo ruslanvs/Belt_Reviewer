@@ -52,7 +52,6 @@ class UserManager( models.Manager ):
                 email = post_data['email'],
                 pw = bcrypt.hashpw( post_data['pw'].encode(), bcrypt.gensalt() )
             )
-            # >> not returning anything here explicitly?
 
     def login_validation( self, post_data ):
         # EMAIL VALIDATION
@@ -93,9 +92,9 @@ class AuthorManager( models.Manager):
 
     def create( self, post_data ):
         if post_data['new_author']:
-            Author.objects.create(
-                name = post_data['new_author']
-            )
+            a = Author()
+            a.name = post_data['new_author']
+            a.save()
             author = Author.objects.get( name = post_data['new_author'] ) #>> check if this is available in other classes
         else:
             author = Author.objects.get( id = post_data['author'] )
@@ -119,15 +118,14 @@ class BookManager( models.Manager ):
             return errors
 
     def create( self, post_data, user_id, author ):
-        Book.objects.create(
-            title = post_data['title'],
-            author = author, #>> check if this is available from Author class
-            user = User.objects.get( id = user_id )
-        )
+        b = Book()
+        b.user = User.objects.get( id = user_id )
+        b.title = post_data['title']
+        b.author = author
+        b.save()
 
 class ReviewManager( models.Manager ):
     def validator( self, post_data, user_id ): #>> check if user id is needed here
-        print '*'*25, 'REVIEW MANAGER POST DATA:', post_data
         errors = {}
 
         # VALIDATE REVIEW CONTENT
@@ -138,13 +136,15 @@ class ReviewManager( models.Manager ):
         if errors:
             return errors
 
-    def create( self, post_data, user_id ):
-        Review.objects.create(
-            content = post_data['content'],
-            rating = post_data['rating'],
-            user = User.objects.get( id = user_id ),
-            book = Book.objects.get( title = post_data['title'] )
-        )
+    def create( self, post_data, user_id, book_id ):
+        print '*'*25, 'REVIEW MANAGER POST DATA ON CREATE:', post_data
+        
+        r = Review()
+        r.content = post_data['content']
+        r.rating = post_data['rating']
+        r.user = User.objects.get( id = user_id )
+        r.book = Book.objects.get( id = book_id )
+        r.save()
 
 class User( models.Model ):
     fname = models.CharField( max_length = 255 )
